@@ -65,6 +65,20 @@ abstract class UuidType extends Type
             );
     }
 
+    public function getMappedDatabaseTypes(
+        AbstractPlatform $platform,
+    ): array {
+        return [
+            $this->getName(),
+        ];
+    }
+
+    public function requiresSQLCommentHint(
+        AbstractPlatform $platform,
+    ): bool {
+        return true;
+    }
+
     abstract public function getName(): string;
 
     abstract protected function covertToUuid(string $uuid): Uuid;
