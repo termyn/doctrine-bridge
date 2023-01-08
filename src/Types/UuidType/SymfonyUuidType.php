@@ -9,7 +9,7 @@ use Termyn\Uuid\Symfony\SymfonyUuid;
 
 final class SymfonyUuidType extends UuidType
 {
-    public const NAME = 'termyn.symfony_uuid';
+    public const NAME = 'termyn.uuid_symfony';
 
     public function getName(): string
     {

@@ -9,7 +9,7 @@ use Termyn\Uuid\Ramsey\RamseyUuid;
 
 final class RamseyUuidType extends UuidType
 {
-    public const NAME = 'termyn.ramsey_uuid';
+    public const NAME = 'termyn.uuid_ramsey';
 
     public function getName(): string
     {
