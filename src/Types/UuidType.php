@@ -32,7 +32,11 @@ abstract class UuidType extends Type
     public function convertToDatabaseValue(
         mixed $value,
         AbstractPlatform $platform,
-    ): string {
+    ): ?string {
+        if (null === $value) {
+            return null;
+        }
+
         if (! $value instanceof Uuid) {
             throw ConversionException::conversionFailedInvalidType(
                 value: $value,
@@ -55,8 +59,12 @@ abstract class UuidType extends Type
     public function convertToPHPValue(
         mixed $value,
         AbstractPlatform $platform,
-    ): Uuid {
-        return is_string($value) && $this->isValidUuidString($value)
+    ): ?Uuid {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        return $this->isValidUuidString($value)
             ? $this->covertToUuid($value)
             : throw ConversionException::conversionFailedFormat(
                 value: $value,
