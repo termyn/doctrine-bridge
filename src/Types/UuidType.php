@@ -33,7 +33,7 @@ abstract class UuidType extends Type
         mixed $value,
         AbstractPlatform $platform,
     ): ?string {
-        if (null === $value) {
+        if ($value === null) {
             return null;
         }
 
@@ -79,12 +79,6 @@ abstract class UuidType extends Type
         return [
             $this->getName(),
         ];
-    }
-
-    public function requiresSQLCommentHint(
-        AbstractPlatform $platform,
-    ): bool {
-        return true;
     }
 
     abstract public function getName(): string;
