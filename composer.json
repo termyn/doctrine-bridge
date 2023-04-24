@@ -27,10 +27,10 @@
     },
     "require-dev": {
         "doctrine/dbal": "^3.4",
-        "phpstan/phpstan": "1.9.*",
+        "phpstan/phpstan": "1.10.*",
         "phpstan/phpstan-phpunit": "1.3.*",
-        "phpunit/phpunit": "9.5.*",
-        "symplify/easy-coding-standard": "11.1.*",
+        "phpunit/phpunit": "10.1.*",
+        "symplify/easy-coding-standard": "11.3.*",
         "termyn/date-time": "dev-main",
         "termyn/id": "dev-main",
         "termyn/money": "dev-main"
