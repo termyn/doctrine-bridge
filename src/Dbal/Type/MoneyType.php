@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Termyn\Bridge\Doctrine\Types;
+namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
@@ -32,7 +32,7 @@ final class MoneyType extends JsonType
         AbstractPlatform $platform,
     ): ?Money {
         $value = parent::convertToPHPValue($value, $platform);
-        if ($value === []) {
+        if (! is_array($value) || count($value) < 2) {
             return null;
         }
 
