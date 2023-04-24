@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Termyn\Bridge\Doctrine\Types;
+namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -13,10 +13,8 @@ final class CurrencyType extends Type
 {
     public const NAME = 'termyn.currency';
 
-    public function getSQLDeclaration(
-        array $column,
-        AbstractPlatform $platform,
-    ): string {
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
         return $platform->getBinaryTypeDeclarationSQL([
             'length' => '3',
             'fixed' => true,
@@ -25,7 +23,7 @@ final class CurrencyType extends Type
 
     public function convertToDatabaseValue(
         $value,
-        AbstractPlatform $platform,
+        AbstractPlatform $platform
     ): ?string {
         if (! $value instanceof Currency) {
             return null;
@@ -36,9 +34,9 @@ final class CurrencyType extends Type
 
     public function convertToPHPValue(
         mixed $value,
-        AbstractPlatform $platform,
+        AbstractPlatform $platform
     ): ?Currency {
-        if ($value === null || $value === '') {
+        if (! is_string($value) || $value === '') {
             return null;
         }
 
@@ -50,15 +48,13 @@ final class CurrencyType extends Type
         return self::NAME;
     }
 
-    public function getMappedDatabaseTypes(
-        AbstractPlatform $platform,
-    ): array {
+    public function getMappedDatabaseTypes(AbstractPlatform $platform): array
+    {
         return [self::NAME];
     }
 
-    public function requiresSQLCommentHint(
-        AbstractPlatform $platform,
-    ): bool {
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
         return true;
     }
 }
