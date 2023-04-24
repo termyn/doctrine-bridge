@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Termyn\Bridge\Doctrine\Types;
+namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use DateTimeImmutable;
 use DateTimeZone;

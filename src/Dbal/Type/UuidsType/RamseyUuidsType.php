@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Termyn\Bridge\Doctrine\Types\UuidsType;
+namespace Termyn\Bridge\Doctrine\Dbal\Type\UuidsType;
 
-use Termyn\Bridge\Doctrine\Types\UuidsType;
+use Termyn\Bridge\Doctrine\Dbal\Type\UuidsType;
 use Termyn\Uuid;
 use Termyn\Uuid\Ramsey\RamseyUuid;
 

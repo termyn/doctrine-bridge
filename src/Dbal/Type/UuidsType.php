@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Termyn\Bridge\Doctrine\Types;
+namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
