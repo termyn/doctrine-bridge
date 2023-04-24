@@ -47,15 +47,13 @@ final class MoneyType extends JsonType
         return self::NAME;
     }
 
-    public function getMappedDatabaseTypes(
-        AbstractPlatform $platform,
-    ): array {
+    public function getMappedDatabaseTypes(AbstractPlatform $platform): array
+    {
         return [self::NAME];
     }
 
-    public function requiresSQLCommentHint(
-        AbstractPlatform $platform,
-    ): bool {
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
         return true;
     }
 }
