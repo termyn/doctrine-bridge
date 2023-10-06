@@ -5,23 +5,13 @@ declare(strict_types=1);
 namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\JsonType;
 use Termyn\Currencies;
 use Termyn\Money;
 
-final class MoneyType extends Type
+final class MoneyJsonType extends JsonType
 {
-    public const NAME = 'termyn.money';
-
-    public function getSQLDeclaration(
-        array $column,
-        AbstractPlatform $platform
-    ): string {
-        return $platform->getBinaryTypeDeclarationSQL([
-            'length' => '16',
-            'fixed' => false,
-        ]);
-    }
+    public const NAME = 'termyn.money_json';
 
     public function convertToDatabaseValue(
         $value,
@@ -31,7 +21,10 @@ final class MoneyType extends Type
             return null;
         }
 
-        return sprintf('%s%s', $value->currency->symbol(), $value->amount);
+        return parent::convertToDatabaseValue([
+            $value->amount,
+            $value->currency->code(),
+        ], $platform);
     }
 
     public function convertToPHPValue(
@@ -39,21 +32,14 @@ final class MoneyType extends Type
         AbstractPlatform $platform,
     ): ?Money {
         $value = parent::convertToPHPValue($value, $platform);
-        if (! is_string($value)) {
+        if (! is_array($value) || count($value) < 2) {
             return null;
         }
 
-        preg_match('/^(\-|\+)?([^0-9\-\+]{1,3})([1-9]+[0-9\.]*)$/', $value, $matches);
-        if (! is_array($matches) || count($matches) == 4) {
-            return null;
-        }
-
-        $symbol = sprintf('%s', $matches[2]);
-        $amount = floatval(
-            sprintf('%s%s', $matches[1], $matches[3])
+        return Money::of(
+            amount: floatval($value[0]),
+            currency: Currencies::fromCode($value[1]),
         );
-
-        return Money::of($amount, Currencies::fromSymbol($symbol));
     }
 
     public function getName(): string
