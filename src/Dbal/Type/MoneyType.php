@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Termyn\Bridge\Doctrine\Dbal\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Termyn\Currencies;
+use Termyn\InvalidMoneyString;
 use Termyn\Money;
 
 final class MoneyType extends Type
@@ -17,7 +19,7 @@ final class MoneyType extends Type
         array $column,
         AbstractPlatform $platform
     ): string {
-        return $platform->getBinaryTypeDeclarationSQL([
+        return $platform->getStringTypeDeclarationSQL([
             'length' => '16',
             'fixed' => false,
         ]);
@@ -31,7 +33,7 @@ final class MoneyType extends Type
             return null;
         }
 
-        return sprintf('%s%s', $value->currency->symbol(), $value->amount);
+        return (string) $value;
     }
 
     public function convertToPHPValue(
@@ -43,17 +45,11 @@ final class MoneyType extends Type
             return null;
         }
 
-        preg_match('/^(\-|\+)?([^0-9\-\+]{1,3})([1-9]+[0-9\.]*)$/', $value, $matches);
-        if (! is_array($matches) || count($matches) == 4) {
-            return null;
+        try {
+            return Money::from($value);
+        } catch (InvalidMoneyString) {
+            throw ConversionException::conversionFailedFormat($value, Money::class, '[-]($|€|*)number');
         }
-
-        $symbol = sprintf('%s', $matches[2]);
-        $amount = floatval(
-            sprintf('%s%s', $matches[1], $matches[3])
-        );
-
-        return Money::of($amount, Currencies::fromSymbol($symbol));
     }
 
     public function getName(): string
