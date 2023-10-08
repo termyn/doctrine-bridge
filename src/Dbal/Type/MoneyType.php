@@ -48,7 +48,7 @@ final class MoneyType extends Type
         try {
             return Money::from($value);
         } catch (InvalidMoneyString) {
-            throw ConversionException::conversionFailedFormat($value, Money::class, '[-]($|€|*)number');
+            throw ConversionException::conversionFailedFormat($value, Money::class, '[-]($|€|\.{1,3})[0-9]');
         }
     }
 
