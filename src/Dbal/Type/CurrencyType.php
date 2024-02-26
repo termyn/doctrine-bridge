@@ -15,7 +15,7 @@ final class CurrencyType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getBinaryTypeDeclarationSQL([
+        return $platform->getStringTypeDeclarationSQL([
             'length' => '3',
             'fixed' => true,
         ]);
@@ -40,7 +40,7 @@ final class CurrencyType extends Type
             return null;
         }
 
-        return Currencies::from($value);
+        return Currencies::fromCode($value);
     }
 
     public function getName(): string
