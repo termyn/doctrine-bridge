@@ -7,12 +7,17 @@ namespace Termyn\Bridge\Doctrine\Dbal\Type;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\DateTimeTzImmutableType;
+use Doctrine\DBAL\Types\Type;
 use Termyn\DateTime\Instant;
 
-final class InstantType extends DateTimeTzImmutableType
+final class InstantType extends Type
 {
     public const NAME = 'termyn.instant';
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getDateTimeTzTypeDeclarationSQL($column);
+    }
 
     public function convertToDatabaseValue(
         $value,
@@ -36,10 +41,11 @@ final class InstantType extends DateTimeTzImmutableType
         $value,
         AbstractPlatform $platform,
     ): ?Instant {
-        $dateTime = parent::convertToPHPValue($value, $platform);
-        if (! $dateTime instanceof DateTimeImmutable) {
-            return null;
+        if ($value === null || $value instanceof Instant)  {
+            return $value;
         }
+
+        $dateTime = DateTimeImmutable::createFromFormat($platform->getDateTimeTzFormatString(), $value);
 
         return Instant::of(
             $dateTime->getTimestamp()
